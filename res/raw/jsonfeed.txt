@@ -1,0 +1,19 @@
+{
+    "business": [
+        {
+            "id": "46",
+            "latitude": "35.777596",
+            "longitude": "-78.675256",
+            "name": "Ruckus Raleigh",
+            "address_line1": "2233 Avent Ferry Rd",
+            "address_line2": "",
+            "city": "Raleigh",
+            "state": "NC",
+            "zip": "27606",
+            "phone": "919-835-2002",
+            "website": "http://ruckuspizza.com/",
+            "image": "https://s3.amazonaws.com/StealzDev/stealz/public/system/avatars/46/admin/Ruckus_Logo.jpg?1359585502",
+            "image_row": "https://s3.amazonaws.com/StealzDev/stealz/public/system/avatars/46/row/Ruckus_Logo.jpg?1359585502"
+        }
+    ]
+}
