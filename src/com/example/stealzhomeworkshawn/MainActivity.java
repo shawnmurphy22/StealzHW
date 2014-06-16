@@ -35,10 +35,9 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.estimote.sdk.*;
-import com.estimote.sdk.connection.BeaconConnection.ConnectionCallback;
-import com.estimote.sdk.service.BeaconService;
-import com.example.stealzhomeworkshawn.R.layout;
+import com.estimote.sdk.Beacon;
+import com.estimote.sdk.BeaconManager;
+import com.estimote.sdk.Region;
 
 public class MainActivity extends ActionBarActivity {
 	
@@ -71,6 +70,7 @@ public class MainActivity extends ActionBarActivity {
 	private static final String ESTIMOTE_PROXIMITY_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FE6D";
 	private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMOTE_PROXIMITY_UUID, null, null);
 	private BeaconManager beaconManager = new BeaconManager(this);
+	private Beacon beaconTemp;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -182,30 +182,35 @@ public class MainActivity extends ActionBarActivity {
 		myLinearLayout.addView(valueIm2);
 		// beacon manager
 		beaconManager.setRangingListener(new BeaconManager.RangingListener() {
-		    			// Discovery function
-			@Override public void onBeaconsDiscovered(Region region, List<Beacon> beacons) {
-		    		// check for beacons
-		    		if((beacons.size() >= 1) && (count < 1)) {
-		    			// get the closest beacon
-		    			Beacon beaconTemp = beacons.get(0);
-		    			// display the closest beacons name
-		    			valueTV2.setText(beaconTemp.getName() + " is in range!"  );
-			    		// position the popUp window in middle of screen
-		    			popUp.showAtLocation(myLinearLayout, Gravity.CENTER, 0, 0);
-	                    popUp.update(Gravity.CENTER_HORIZONTAL, Gravity.CENTER_VERTICAL, 300, 200);
-	                    // increment count
-	                    count++;
-	                // check for when beacon is out of range    
-		    		}else if( (beacons.size() == 0) && ( count > 0 )) {
-		    			// Update and show pop-up window
-		    			valueTV2.setText("No beacons in range!");
-		    			popUp.showAtLocation(myLinearLayout, Gravity.CENTER, 0, 0);
-	                    popUp.update(Gravity.CENTER_HORIZONTAL, Gravity.CENTER_VERTICAL, 300, 200);
-		    			count--;
-		    		
-		    		}
-		    }
-		  });
+			// Discovery function
+@Override public void onBeaconsDiscovered(Region region, final List<Beacon> beacons) {
+		// check for beacons
+	runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+        	  	if((beacons.size() >= 1) && (count < 1)) {
+			// get the closest beacon
+			beaconTemp = beacons.get(0);
+			// display the closest beacons name
+			valueTV2.setText(beaconTemp.getName() + " is in range!"  );
+    		// position the popUp window in middle of screen
+			popUp.showAtLocation(myLinearLayout, Gravity.CENTER, 0, 0);
+            popUp.update(Gravity.CENTER_HORIZONTAL, Gravity.CENTER_VERTICAL, 300, 200);
+            // increment count
+            count++;
+        // check for when beacon is out of range    
+		}else if( (beacons.size() == 0) && ( count > 0 )) {
+			// Update and show pop-up window
+			valueTV2.setText("No beacons in range!");
+			popUp.showAtLocation(myLinearLayout, Gravity.CENTER, 0, 0);
+            popUp.update(Gravity.CENTER_HORIZONTAL, Gravity.CENTER_VERTICAL, 300, 200);
+			count--;
+		
+		}
+          }
+	});
+}
+});
 	}
 	
 	@Override
